@@ -1,0 +1,53 @@
+version: '3.9'
+services:
+  todo-db:
+    image: mongodb/mongodb-community-server:6.0.11-ubi9
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+      - DB_USERNAME=super-user
+      - DB_PASSWORD=password
+      - DB_NAME=todo-app-db
+      - DB_COLLECTION=todos
+    # ports:
+    #   - 27017:27017
+    volumes:
+      - ./db-dump:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - todo-network
+  todo-db-mongo-express:
+    image: mongo-express
+    depends_on:
+      - todo-db
+    networks:
+      - todo-network
+    restart: "on-failure"
+    ports:
+      - ${MONGO_EXPRESS_PORT}:8081
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    environment:
+      ME_CONFIG_MONGODB_URL: "mongodb://super-user:password@todo-db:27017/todo-app-db"
+      ME_CONFIG_BASICAUTH: "true"
+      MONGO_EXPRESS_PORT: ${MONGO_EXPRESS_PORT-8081}
+  app-server:
+    image: node:current-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - todo-db
+    networks:
+      - todo-network
+    ports:
+      - ${PORT}:3000
+    command: yarn start
+    environment:
+      PORT: ${PORT-3000}
+      DB_CONNECT_STRING: "mongodb://super-user:password@todo-db:27017/todo-app-db"
+
+networks:
+  todo-network:
