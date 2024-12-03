@@ -19,3 +19,5 @@ cp .env.sample .env
 
 ## database UI - mongo express
 http://localhost:3010/db/todo-app-db
+- username: admin
+- password: pass
