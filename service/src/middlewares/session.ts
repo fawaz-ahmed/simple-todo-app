@@ -18,16 +18,16 @@ store.on('error', function(error: any) {
 const setupSessions = (app: Express) => app.use(session({
   secret: 'session-secret',
   cookie: {
-    secure: false,
     httpOnly: true,
-    // maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 48,
   },
   store: store,
   // Boilerplate options, see:
   // * https://www.npmjs.com/package/express-session#resave
   // * https://www.npmjs.com/package/express-session#saveuninitialized
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 
 export { setupSessions }

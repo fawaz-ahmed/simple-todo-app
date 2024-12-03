@@ -1,13 +1,18 @@
-import { create } from 'apisauce';
-import { Todo } from '../Types/todo';
-import { Platform } from 'react-native';
+// import axios from 'axios'
+import { create } from 'apisauce'
+import { Todo } from '../Types';
 
-const baseURL = Platform.select({
-  ios: 'http://localhost:3000',
-  android: 'http://10.0.2.2:3000',
-});
+const baseURL = 'http://localhost:3000';
 
-const api = create({ baseURL });
+// const customAxiosInstance = axios.create({ baseURL })
+
+// const api = create({
+//   axiosInstance: customAxiosInstance,
+//   baseURL,
+//   withCredentials: true,
+// })
+
+const api = create({ baseURL, withCredentials: true })
 
 export const fetchTodos = async (): Promise<Todo[]> => {
     const response = await api.get('/todo');

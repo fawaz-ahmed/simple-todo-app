@@ -7,12 +7,14 @@ import { editTodo } from '../operations/todo.edit';
 export const todoRoutes = Router();
 
 todoRoutes.get('/todo', async function(req, res) {
+  console.log('Session id', req.session.id, JSON.stringify(req.session));
   const sessionId = req.session.id;
   const todos = await getTodoList(sessionId);
   res.status(200).send(todos);
 });
 
 todoRoutes.post('/todo', function(req, res) {
+  console.log('Session id', req.session);
   const sessionId = req.session.id;
   const todo = req.body.todo;
   createTodo(sessionId, todo)
@@ -21,6 +23,7 @@ todoRoutes.post('/todo', function(req, res) {
 });
 
 todoRoutes.patch('/todo/:id', function(req, res) {
+  console.log('Session id', req.session.id);
   const sessionId = req.session.id;
   const todoId = req.params.id;
   const todo = req.body.todo;
@@ -30,6 +33,7 @@ todoRoutes.patch('/todo/:id', function(req, res) {
 });
 
 todoRoutes.delete('/todo/:id', function(req, res) {
+  console.log('Session id', req.session.id);
   const sessionId = req.session.id;
   const todoId = req.params.id;
   deleteTodo(sessionId, todoId)

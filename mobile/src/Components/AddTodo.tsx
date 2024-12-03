@@ -36,6 +36,7 @@ const AddTodo: React.FC<{ onAddTodo: (todo: Todo) => void, defaultTodoText?: str
         value={todoText}
         onChangeText={setTodoText}
         editable={!loading}
+        onSubmitEditing={handleAddTodo}
       />
       <Button disabled={loading || !todoText} title="Add" onPress={handleAddTodo} />
     </View>
